@@ -140,13 +140,10 @@
 
     /* ── DETAIL HEADER ── */
     .detail-header {
-      position: sticky; top: 0; z-index: 50;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       padding: 14px 20px 16px;
-      transition: transform 0.25s ease;
     }
-    .detail-header.hidden { transform: translateY(-100%); }
     .back-btn {
       background: none; border: none;
       color: var(--blue); font-size: 17px;
@@ -649,8 +646,6 @@ function toggleDone(e, id) {
 // DETAIL VIEW
 // ══════════════════════════════════════════════════════════════════
 
-let _scrollHandler = null;
-
 function openDetail(id) {
   currentId = id;
   const s = sessions.find(x => x.id === id);
@@ -674,25 +669,9 @@ function openDetail(id) {
   document.getElementById('homeView').classList.remove('active');
   document.getElementById('detailView').classList.add('active');
   window.scrollTo(0, 0);
-
-  // Auto-hide header on scroll down, reveal on scroll up
-  const header = document.querySelector('.detail-header');
-  header.classList.remove('hidden');
-  let lastY = 0;
-  _scrollHandler = () => {
-    const y = window.scrollY;
-    if (y > lastY && y > 60) header.classList.add('hidden');
-    else header.classList.remove('hidden');
-    lastY = y;
-  };
-  window.addEventListener('scroll', _scrollHandler, { passive: true });
 }
 
 function closeDetail() {
-  if (_scrollHandler) {
-    window.removeEventListener('scroll', _scrollHandler);
-    _scrollHandler = null;
-  }
   document.getElementById('detailView').classList.remove('active');
   document.getElementById('homeView').classList.add('active');
   currentId = null;
